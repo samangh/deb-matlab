@@ -1,0 +1,9 @@
+installer_*
+fileInstallationKey
+license.lic
+debhelper-build-stamp
+*.substvars
+build/
+debian/files
+debian/matlab
+debian/.debhelper

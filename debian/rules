@@ -1,0 +1,67 @@
+#!/usr/bin/make -f
+export DESTDIR=$(CURDIR)/debian/matlab
+# Upstream version without revision
+export VERSION=$(shell dpkg-parsechangelog --show-field Version | cut -d'-' -f1)
+# Convert full version to Matlab main version (YYYY[ab]]) and update number
+export MATLAB_VERSION=$(shell echo $(VERSION) | sed -r 's|([0-9]+[ab])([0-9])+|\1|g')
+export MATLAB_UPDATE=$(shell echo $(VERSION) | sed -r 's|([0-9]+[ab])([0-9])+|\2|g')
+
+%:
+	dh $@
+
+override_dh_clean:
+	@rm build -Rf
+	dh_clean
+
+override_dh_install:
+
+	# Verifying installer version
+	@if [ ! -f installer_$(VERSION)/VersionInfo.xml ]; then \
+		echo "Please provide Matlab downloaded files in \"installer_$(VERSION)/"\"; \
+		exit 1; \
+	fi
+	@if ! grep -zq '<release>R$(MATLAB_VERSION)</release>\s*<description>Update $(MATLAB_UPDATE)</description>' installer_$(VERSION)/VersionInfo.xml; then \
+		echo "Version missmatch: installer is not for version $(VERSION) = $(MATLAB_VERSION) update $(MATLAB_UPDATE)"; \
+		exit 1; \
+	fi
+
+	# Verifying file installation key
+	@if [ ! -f fileInstallationKey ]; then \
+		echo "File installation key not provided in the file $(CURDIR)/fileInstallationKey"; \
+	fi
+
+	# Generating installer_input.txt
+	@mkdir -p build/
+	@cp installer_$(VERSION)/installer_input.txt build/
+	@fik=`cat fileInstallationKey`; \
+	sed -i -e 's|# destinationFolder=|destinationFolder=$(DESTDIR)/opt/matlab|g' \
+	       -e "s|# fileInstallationKey=|fileInstallationKey=$$fik|g" \
+	       -e 's|# agreeToLicense=|agreeToLicense=yes|g' \
+	       -e 's|# outputFile=|outputFile=$(CURDIR)/build/install.log|g' \
+	       -e 's|# enableLNU=yes|enableLNU=no|g' \
+	       -e 's|improveMATLAB=yes|improveMATLAB=no|g' \
+	    build/installer_input.txt
+	@if [ -f license.lic ]; then \
+		sed -i -e 's|# licensePath=|licensePath=$(CURDIR)/license.lic|g' build/installer_input.txt; \
+	fi
+
+	# Running installer
+	@installer_$(VERSION)/install -inputFile build/installer_input.txt
+
+	# Adding links and icon
+	@dh_link /opt/matlab/bin/matlab /usr/bin/matlab
+	@dh_install debian/matlab/opt/matlab/bin/glnxa64/cef_resources/matlab_icon.png /usr/share/icons/hicolor/256x256/apps/matlab.png
+
+	# Generating desktop file
+	@export VERSION=$(MATLAB_VERSION); cat matlab.desktop | envsubst > build/matlab.desktop
+	@dh_install build/matlab.desktop /usr/share/applications/
+
+# Do no strip and use shlibs
+override_dh_strip_nondeterminism:
+	
+override_dh_strip:
+	
+override_dh_makeshlibs:
+	
+override_dh_shlibdeps:
+	

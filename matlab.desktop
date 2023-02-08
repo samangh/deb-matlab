@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+TryExec=/opt/matlab/bin/matlab
+Exec=/opt/matlab/bin/matlab -desktop %F
+Name=MATLAB $VERSION
+Icon=matlab
+Categories=Development;Math;Science
+Comment=Scientific computing environment
+StartupNotify=true
+StartupWMClass=MATLAB $VERSION - academic use
