@@ -1,3 +1,9 @@
+matlab (2022b3) unstable; urgency=medium
+
+  * Upstream version 2022b Update 3 
+
+ -- Julien Guillod <julien.guillod@sorbonne-universite.fr>  Wed, 08 Feb 2023 10:03:20 +0100
+
 matlab (2022a6) unstable; urgency=medium
 
   * Upstream version 2022a Update 6

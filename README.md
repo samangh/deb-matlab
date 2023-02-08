@@ -25,7 +25,7 @@ Inspired by [MATLAB Arch Linux PKGBUILD](https://aur.archlinux.org/packages/matl
 3. Select and download the products, the files are downloaded in `$HOME/Downloads/MathWorks/R*/*`
 4. Define the downloaded version (with update patch):
 
-        export VERSION=2022a6
+        export VERSION=2022b3
 
 5. Clone the git repository containing the packages rules in an empty directory:
 
@@ -53,7 +53,7 @@ Inspired by [MATLAB Arch Linux PKGBUILD](https://aur.archlinux.org/packages/matl
 
 Once generated, the package `matlab_$VERSION_amd64.deb` can be installed for example with:
 
-sudo apt install ../matlab_$VERSION_amd64.deb
+    sudo apt install ../matlab_$VERSION_amd64.deb
 
 
 ## Contact
