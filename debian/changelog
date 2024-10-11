@@ -1,3 +1,9 @@
+matlab (2024b) unstable; urgency=medium
+
+  * Upstream version 2024b
+
+ -- Saman Ghannadzadeh <saman@saman-gh.co.uk>  Fri, 1 Oct 2024 10:00:00 +0000
+
 matlab (2022b3) unstable; urgency=medium
 
   * Upstream version 2022b Update 3 
